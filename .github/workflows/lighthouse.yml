@@ -1,0 +1,59 @@
+name: Lighthouse Audit
+
+on:
+  schedule:
+    - cron: '0 * * * *'  # Every hour
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  lighthouse:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout main branch
+        uses: actions/checkout@v3
+        with:
+          ref: main
+          fetch-depth: 0  # Needed to commit later
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '18'
+
+      - name: Install Lighthouse CLI
+        run: npm install -g lighthouse
+
+      - name: Run Lighthouse and store reports
+        run: |
+          export TZ= "America/Toronto"
+          TIMESTAMP=$(date +'%Y-%m-%d-%H%M')
+          mkdir -p reports
+          lighthouse https://sensationtherapie.com/ \
+            --output html \
+            --output-path reports/${TIMESTAMP}-production.html \
+            --chrome-flags="--headless"
+          lighthouse https://staging.sensationtherapie.com/ \
+            --output html \
+            --output-path reports/${TIMESTAMP}-staging.html \
+            --chrome-flags="--headless"
+          lighthouse https://adnanu3.sg-host.com/ \
+            --output html \
+            --output-path reports/${TIMESTAMP}-siteground.html \
+            --chrome-flags="--headless"
+          lighthouse https://flybysimulations.com/ \
+            --output html \
+            --output-path reports/${TIMESTAMP}-flybysimulations.html \
+            --chrome-flags="--headless"
+
+      - name: Commit and push reports to main
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add reports/*.html
+          git add reports/index.html
+          git commit -m "📄 Update Lighthouse report index ($(date +'%Y-%m-%d %H:%M'))" || echo "No changes"
+          git push origin
