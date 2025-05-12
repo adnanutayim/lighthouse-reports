@@ -29,7 +29,7 @@ jobs:
 
       - name: Run Lighthouse and store reports
         run: |
-          export TZ= "America/Toronto"
+          export TZ="America/Toronto"
           TIMESTAMP=$(date +'%Y-%m-%d-%H%M')
           mkdir -p reports
           lighthouse https://sensationtherapie.com/ \
