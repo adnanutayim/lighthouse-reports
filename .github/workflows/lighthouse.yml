@@ -29,7 +29,6 @@ jobs:
 
       - name: Run Lighthouse and store reports
         run: |
-          mkdir -p reports
           export TZ="America/Toronto"
           TIMESTAMP=$(date +'%Y-%m-%d-%H%M')
           mkdir -p reports
