@@ -29,6 +29,7 @@ jobs:
 
       - name: Run Lighthouse and store reports
         run: |
+          mkdir -p reports
           export TZ="America/Toronto"
           TIMESTAMP=$(date +'%Y-%m-%d-%H%M')
           mkdir -p reports
@@ -47,6 +48,10 @@ jobs:
           lighthouse https://flybysimulations.com/ \
             --output html \
             --output-path reports/${TIMESTAMP}-flybysimulations.html \
+            --chrome-flags="--headless"
+          lighthouse https://dev.sensationtherapie.com/ \
+            --output html \
+            --output-path reports/${TIMESTAMP}-dev.sensationtherapie.html \
             --chrome-flags="--headless"
 
       - name: Commit and push reports to main
