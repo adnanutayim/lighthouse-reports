@@ -35,7 +35,7 @@ jobs:
           mkdir -p reports
           lighthouse https://adnanu4.sg-host.com/ \
             --output html \
-            --output-path reports/${TIMESTAMP}-siteground.html \
+            --output-path reports/${TIMESTAMP}-adnanu4.html \
             --chrome-flags="--headless"
           lighthouse https://flybysimulations.com/ \
             --output html \
@@ -43,7 +43,7 @@ jobs:
             --chrome-flags="--headless"
           lighthouse https://staging2.flybysimulations.com/ \
             --output html \
-            --output-path reports/${TIMESTAMP}-dev.sensationtherapie.html \
+            --output-path reports/${TIMESTAMP}staging2.flybysimulations.html \
             --chrome-flags="--headless"
 
       - name: Commit and push reports to main
